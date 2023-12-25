@@ -13,6 +13,10 @@ pipeline {
         NEXUS_URL = "nexus:8081"
         NEXUS_REPOSITORY = "backend-nexus-repo"
         NEXUS_CREDENTIAL_ID = "nexus-user-credentials"
+        ARTIFACT_VERSION = "0.0.1-SNAPSHOT"
+        ARTIFACT_TYPE = "jar"
+        ARTIFACT_ID = "blog"
+        GROUP_ID = "com.jcibardo.blog"
     }
 
     stages {
@@ -48,7 +52,37 @@ pipeline {
 
         stage('Publish to Nexus Repository Manager') {
             steps() {
-                pom = readMavenPom file: "pom.xml"
+                nexusArtifactUploader(
+                    nexusVersion: NEXUS_VERSION,
+                    protocol: NEXUS_PROTOCOL,
+                    nexusUrl: NEXUS_URL,
+                    groupId: GROUP_ID,
+                    version: ARTIFACT_VERSION,
+                    repository: NEXUS_REPOSITORY,
+                    credentialsId: NEXUS_CREDENTIAL_ID,
+                    artifacts: [
+                        [artifactId: ARTIFACT_ID,
+                        classifier: '',
+                        file: "target/${ARTIFACT_ID}-${ARTIFACT_VERSION}.${ARTIFACT_TYPE},
+                        type: ARTIFACT_VERSION]
+                    ]
+                )
+                /*nexusArtifactUploader artifacts: [
+                    [
+                        artifactId: 'blog', 
+                        classifier: '', 
+                        file: 'target/blog-0.0.1-SNAPSHOT.jar', 
+                        type: 'jar'
+                    ]
+                ], 
+                credentialsId: 'nexus-user-credentials', 
+                groupId: 'com.jcibardo.blog', 
+                nexusUrl: NEXUS_URL, 
+                nexusVersion: NEXUS_VERSION, 
+                protocol: NEXUS_PROTOCOL, 
+                repository: NEXUS_REPOSITORY, 
+                version: '0.0.1-SNAPSHOT'*/
+                /*pom = readMavenPom file: "pom.xml"
                 filesByGlob = findFiles(glob: "target/*.${pom.packaging}")
                 artifactPath = filesByGlob[0].path
                 artifactExists = fileExists artifactPath
@@ -64,13 +98,9 @@ pipeline {
                         [artifactId: pom.artifactId,
                         classifier: '',
                         file: artifactPath,
-                        type: pom.packaging],
-                        [artifactId: pom.artifactId,
-                        classifier: '',
-                        file: "pom.xml",
-                        type: "pom"]
+                        type: pom.packaging]
                     ]
-                )
+                )*/
             }
         }
     }
