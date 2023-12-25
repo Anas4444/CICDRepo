@@ -44,31 +44,27 @@ pipeline {
         stage('Build') {
             steps() {
                 sh "mvn clean package -DskipTests=true"
-                archiveArtifacts artifacts: 'target/*.war', onlyIfSuccessful: true
+                archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true
             }
         }
 
         stage('Publish to Nexus') {
             steps() {
-                nexusArtifactUploader(
+                nexusArtifactUploader artifacts: [
+                        [
+                            artifactId: ARTIFACT_ID,
+                            classifier: '',
+                            file: "target/${ARTIFACT_ID}-${ARTIFACT_VERSION}.${ARTIFACT_TYPE}",
+                            type: ARTIFACT_VERSION
+                        ]
+                    ],
                     nexusVersion: NEXUS_VERSION,
                     protocol: NEXUS_PROTOCOL,
                     nexusUrl: NEXUS_URL,
                     groupId: GROUP_ID,
                     version: ARTIFACT_VERSION,
                     repository: NEXUS_REPOSITORY,
-                    credentialsId: NEXUS_CREDENTIAL_ID,
-                    artifacts: [
-                        [artifactId: ARTIFACT_ID,
-                        classifier: '',
-                        file: "target/${ARTIFACT_ID}-${ARTIFACT_VERSION}.${ARTIFACT_TYPE}",
-                        type: ARTIFACT_VERSION],
-                        [artifactId: ARTIFACT_ID,
-                        classifier: '',
-                        file: "pom.xml",
-                        type: "pom"]
-                    ]
-                )
+                    credentialsId: NEXUS_CREDENTIAL_ID
             }
         }
     }
