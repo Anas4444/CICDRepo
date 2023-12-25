@@ -54,8 +54,8 @@ pipeline {
                         [
                             artifactId: ARTIFACT_ID,
                             classifier: '',
-                            file: "target/${ARTIFACT_ID}-${ARTIFACT_VERSION}.${ARTIFACT_TYPE}",
-                            type: ARTIFACT_VERSION
+                            file: "target/${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar",
+                            type: 'jar'
                         ]
                     ],
                     nexusVersion: NEXUS_VERSION,
