@@ -8,6 +8,7 @@ pipeline {
     }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        DOCKERHUB_REGISTRY = 'anas129/backend'
         SCANNER_HOME=tool 'sonar-scanner'
         NEXUS_VERSION = 'nexus3'
         NEXUS_PROTOCOL = 'http'
@@ -78,10 +79,13 @@ pipeline {
             }
         }*/
         stage('Build Docker Image') {
+            steps() {
+                script() {
+                    docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
+                }
 
-                docker.build("anas129/backend")
                 //sh 'docker build -t anas129/backend .'
-
+            }
         }
     }
 }
