@@ -79,6 +79,9 @@ pipeline {
             }
         }*/
         stage('Build Docker Image') {
+            agent {
+                    docker { image 'docker:24.0.5' }
+                }
             steps() {
                 script() {
                     docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
