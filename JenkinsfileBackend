@@ -7,16 +7,19 @@ pipeline {
         maven "maven3"
     }
     environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         SCANNER_HOME=tool 'sonar-scanner'
-        NEXUS_VERSION = "nexus3"
-        NEXUS_PROTOCOL = "http"
-        NEXUS_URL = "nexus:8081"
-        NEXUS_REPOSITORY = "backend-nexus-repo"
-        NEXUS_CREDENTIAL_ID = "nexus-user-credentials"
-        ARTIFACT_VERSION = "0.0.1-SNAPSHOT"
-        ARTIFACT_TYPE = "jar"
-        ARTIFACT_ID = "blog"
-        GROUP_ID = "com.jcibardo.blog"
+        NEXUS_VERSION = 'nexus3'
+        NEXUS_PROTOCOL = 'http'
+        NEXUS_URL = 'nexus:8081'
+        NEXUS_REPOSITORY = 'backend-nexus-repo'
+        NEXUS_CREDENTIAL_ID = 'nexus-user-credentials'
+        NEXUS_CREDENTIALS = credentials(NEXUS_CREDENTIAL_ID)
+        ARTIFACT_VERSION = '0.0.1-SNAPSHOT'
+        ARTIFACT_ID = 'blog'
+        GROUP_ID = 'com.jcibardo.blog'
+        CLASSIFIER = ''
+        EXTENSION = 'jar'
     }
 
     stages {
@@ -41,7 +44,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Package') {
             steps() {
                 sh "mvn clean package -DskipTests=true"
                 archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true
@@ -50,22 +53,45 @@ pipeline {
 
         stage('Publish to Nexus') {
             steps() {
-                nexusArtifactUploader artifacts: [
-                        [
-                            artifactId: ARTIFACT_ID,
-                            classifier: '',
-                            file: "target/${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar",
-                            type: 'jar'
-                        ]
-                    ],
-                    nexusVersion: NEXUS_VERSION,
-                    protocol: NEXUS_PROTOCOL,
-                    nexusUrl: NEXUS_URL,
-                    groupId: GROUP_ID,
-                    version: ARTIFACT_VERSION,
-                    repository: NEXUS_REPOSITORY,
-                    credentialsId: NEXUS_CREDENTIAL_ID
+                nexusArtifactUploader artifacts:
+                [
+                    [
+                        artifactId: ARTIFACT_ID,
+                        classifier: '',
+                        file: "target/${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar",
+                        type: 'jar'
+                    ]
+                ],
+                nexusVersion: NEXUS_VERSION,
+                protocol: NEXUS_PROTOCOL,
+                nexusUrl: NEXUS_URL,
+                groupId: GROUP_ID,
+                version: ARTIFACT_VERSION,
+                repository: NEXUS_REPOSITORY,
+                credentialsId: NEXUS_CREDENTIAL_ID
+            }
+        }
+
+        /*stage('Download Artifact') {
+            steps() {
+                new_artifact : downloadMavenArtifact("${GROUP_ID}:${ARTIFACT_ID}:${ARTIFACT_VERSION}:${EXTENSION}${(CLASSIFIER != '') ? ':' + CLASSIFIER : ''}")
+            }
+        }*/
+        stage('Build Docker Image') {
+            steps() {
+                sh 'docker build -t anas129/backend .'
             }
         }
     }
 }
+/*def downloadMavenArtifact(mavenCoordinates) {
+    def mavenCmd = """
+        curl -u ${NEXUS_CREDENTIALS_USR}:${NEXUS_CREDENTIALS_PSW} -O "${NEXUS_URL}${mavenCoordinates}"
+    """.stripIndent()
+
+    // Execute the Maven download command
+    sh mavenCmd
+
+    // Return the downloaded artifact path
+    return "${mavenCoordinates}"
+}*/
