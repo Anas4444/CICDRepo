@@ -90,7 +90,8 @@ pipeline {
                     sh 'chown :docker /var/run/docker.sock'
                     sh 'id jenkins'
                     sh 'ls -l /var/run/docker.sock'
-                    docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
+                    sh 'docker build -t anas129/backend:$BUILD_NUMBER .'
+                    //docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
                 }
 
                 //sh 'docker build -t anas129/backend .'
