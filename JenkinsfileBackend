@@ -87,7 +87,7 @@ pipeline {
             }*/
             steps() {
                 script() {
-                    sh 'sudo chown :docker /var/run/docker.sock'
+                    sh 'chown :docker /var/run/docker.sock'
                     sh 'id jenkins'
                     sh 'ls -l /var/run/docker.sock'
                     //docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
