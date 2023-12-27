@@ -79,17 +79,17 @@ pipeline {
             }
         }*/
         stage('Build Docker Image') {
-            agent {
+            /*agent {
                 docker {
                     image 'docker:20.10'
                     args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
-            }
+            }*/
             steps() {
                 script() {
                     sh 'id jenkins'
                     sh 'ls -l /var/run/docker.sock'
-                    docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
+                    //docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
                 }
 
                 //sh 'docker build -t anas129/backend .'
