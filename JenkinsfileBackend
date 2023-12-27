@@ -89,9 +89,10 @@ pipeline {
                 HOME = "${env.WORKSPACE}"
             }
             steps() {
-                script() {
+                sh 'docker build -t anas129/backend .'
+                /*script() {
                     docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
-                }
+                }*/
 
                 //sh 'docker build -t anas129/backend .'
             }
