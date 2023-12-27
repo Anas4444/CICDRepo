@@ -14,7 +14,7 @@ pipeline {
         NEXUS_URL = 'nexus:8081'
         NEXUS_REPOSITORY = 'backend-nexus-repo'
         NEXUS_CREDENTIAL_ID = 'nexus-user-credentials'
-        NEXUS_CREDENTIALS = credentials(NEXUS_CREDENTIAL_ID)
+        NEXUS_CREDENTIALS = credentials("${NEXUS_CREDENTIAL_ID}")
         ARTIFACT_VERSION = '0.0.1-SNAPSHOT'
         ARTIFACT_ID = 'blog'
         GROUP_ID = 'com.jcibardo.blog'
