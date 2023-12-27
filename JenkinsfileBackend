@@ -79,9 +79,15 @@ pipeline {
             }
         }*/
         stage('Build Docker Image') {
-            environment {
-                    HOME = "${env.WORKSPACE}"
+            agent {
+                docker {
+                    image 'docker:20.10'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
+            }
+            environment {
+                HOME = "${env.WORKSPACE}"
+            }
             steps() {
                 script() {
                     docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
