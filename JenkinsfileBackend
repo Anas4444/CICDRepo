@@ -79,7 +79,8 @@ pipeline {
         }*/
         stage('Build Docker Image') {
             steps() {
-                sh 'docker build -t anas129/backend .'
+                docker.build(anas129/backend)
+                //sh 'docker build -t anas129/backend .'
             }
         }
     }
