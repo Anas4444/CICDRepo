@@ -79,7 +79,7 @@ pipeline {
             }
         }*/
         stage('Build Docker Image') {
-            agent {
+            environment {
                     HOME = "${env.WORKSPACE}"
                 }
             steps() {
