@@ -85,14 +85,11 @@ pipeline {
                     args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
-            environment {
-                HOME = "${env.WORKSPACE}"
-            }
             steps() {
-                sh 'docker build -t anas129/backend .'
-                /*script() {
+                script() {
+                    sh 'id jenkins'
                     docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
-                }*/
+                }
 
                 //sh 'docker build -t anas129/backend .'
             }
