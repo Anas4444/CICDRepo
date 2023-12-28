@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        // Install the Maven version configured as "M3" and add it to the path.
+        node "node20"
     }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
@@ -25,6 +25,7 @@ pipeline {
 
         stage('SONARQUBE-ANALYSIS') {
             steps() {
+                sh "echo hello from sonar"
             }
         }
 
@@ -36,7 +37,7 @@ pipeline {
 
         stage('Publish to Nexus') {
             steps() {
-
+                sh "echo hello from nexus"
             }
         }
 
@@ -56,7 +57,7 @@ pipeline {
                     //docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
                 }
 
-                //sh 'docker build -t anas129/backend .'
+                //sh 'docker build -t anas129/frontend .'
             }
         }
     }
