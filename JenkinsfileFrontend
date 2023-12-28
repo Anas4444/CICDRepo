@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+    }
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        DOCKERHUB_REGISTRY = 'anas129/backend'
+        SCANNER_HOME=tool 'sonar-scanner'
+        NEXUS_VERSION = 'nexus3'
+        NEXUS_PROTOCOL = 'http'
+        NEXUS_URL = 'nexus:8081'
+        NEXUS_REPOSITORY = 'frontend-nexus-repo'
+        NEXUS_CREDENTIAL_ID = 'nexus-user-credentials'
+        NEXUS_CREDENTIALS = credentials("${NEXUS_CREDENTIAL_ID}")
+    }
+
+    stages {
+        stage('git Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Anas4444/frontend.git'
+            }
+        }
+
+        stage('SONARQUBE-ANALYSIS') {
+            steps() {
+            }
+        }
+
+        stage('Build Package') {
+            steps() {
+                sh "npm run build2"
+            }
+        }
+
+        stage('Publish to Nexus') {
+            steps() {
+
+            }
+        }
+
+        stage('Build Docker Image') {
+            agent {
+                docker {
+                    image 'docker:20.10'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            steps() {
+                script() {
+                    sh 'chown :docker /var/run/docker.sock'
+                    sh 'id jenkins'
+                    sh 'ls -l /var/run/docker.sock'
+                    sh 'docker build -t anas129/frontend:$BUILD_NUMBER .'
+                    //docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
+                }
+
+                //sh 'docker build -t anas129/backend .'
+            }
+        }
+    }
+}
