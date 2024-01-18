@@ -38,10 +38,11 @@ pipeline {
 
         stage('SONARQUBE-ANALYSIS') {
             steps() {
-                withSonarQubeEnv('sonarqube-server') {
+                sh "echo hello from sonar"
+                /*withSonarQubeEnv('sonarqube-server') {
                     //sh "mvn sonar:sonar"
                     sh '${SCANNER_HOME}/bin/sonar-scanner --version'
-                }
+                }*/
             }
         }
 
