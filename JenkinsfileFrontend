@@ -6,7 +6,7 @@ pipeline {
     }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-        DOCKERHUB_REGISTRY = 'anas129/backend'
+        DOCKERHUB_REGISTRY = 'anas129/frontend'
         SCANNER_HOME=tool 'sonar-scanner'
         NEXUS_VERSION = 'nexus3'
         NEXUS_PROTOCOL = 'http'
@@ -41,6 +41,7 @@ pipeline {
         stage('Publish to Nexus') {
             steps() {
                 sh "echo hello from nexus"
+                }
             }
         }
 
