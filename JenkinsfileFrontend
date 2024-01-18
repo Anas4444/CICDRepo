@@ -41,7 +41,6 @@ pipeline {
         stage('Publish to Nexus') {
             steps() {
                 sh "echo hello from nexus"
-                }
             }
         }
 
