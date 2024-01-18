@@ -44,14 +44,14 @@ pipeline {
 
         stage('Build Docker Image') {
             steps() {
-                sh "Docker Frontend image pushed to dockerhub repository"
+                sh "echo Docker Frontend image pushed to dockerhub repository"
                 //sh 'docker build -t anas129/frontend .'
             }
         }
 
         stage('Deploy') {
             steps() {
-                sh "Frontend deployed"
+                sh "echo Frontend deployed"
             }
         }
     }

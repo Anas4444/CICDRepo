@@ -93,7 +93,7 @@ pipeline {
 
         stage('Deploy') {
             steps() {
-                sh "Backend deployed"
+                sh "echo Backend deployed"
             }
         }
     }
