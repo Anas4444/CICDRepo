@@ -83,16 +83,10 @@ pipeline {
         stage('Build Docker Image') {
             steps() {
                 script() {
-                    //sh 'chown :docker /var/run/docker.sock'
                     sh 'id jenkins'
-                    //sh 'ls -l /var/run/docker.sock'
                     sh 'docker build -t $DOCKERHUB_REGISTRY:$BUILD_NUMBER .'
                     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                     sh 'docker push $DOCKERHUB_REGISTRY:$BUILD_NUMBER'
-                    /*docker.withRegistry('', '$DOCKERHUB_CREDENTIALS') {
-                        sh 'docker push $DOCKERHUB_REGISTRY:$BUILD_NUMBER'
-                    }*/
-                    //docker.build DOCKERHUB_REGISTRY + ":$BUILD_NUMBER"
                 }
             }
         }
