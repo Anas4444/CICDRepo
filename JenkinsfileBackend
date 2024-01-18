@@ -88,6 +88,7 @@ pipeline {
                     //sh 'ls -l /var/run/docker.sock'
                     sh 'docker build -t $DOCKERHUB_REGISTRY:$BUILD_NUMBER .'
                     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    sh 'docker push $DOCKERHUB_REGISTRY:$BUILD_NUMBER'
                     /*docker.withRegistry('', '$DOCKERHUB_CREDENTIALS') {
                         sh 'docker push $DOCKERHUB_REGISTRY:$BUILD_NUMBER'
                     }*/
