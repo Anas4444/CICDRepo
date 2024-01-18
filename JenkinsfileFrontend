@@ -33,6 +33,7 @@ pipeline {
             steps() {
                 sh "npm ci"
                 sh "npm run build2"
+                archiveArtifacts artifacts: 'dist/*', onlyIfSuccessful: true
             }
         }
 
