@@ -80,12 +80,6 @@ pipeline {
         }*/
 
         stage('Build Docker Image') {
-            agent {
-                docker {
-                    image 'docker:20.10'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
             steps() {
                 script() {
                     //sh 'chown :docker /var/run/docker.sock'
