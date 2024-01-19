@@ -15,6 +15,7 @@ pipeline {
         NEXUS_URL = 'nexus:8081'
         NEXUS_REPOSITORY = 'backend-nexus-repo'
         NEXUS_CREDENTIAL_ID = 'nexus-user-credentials'
+        SONAR_ID = 'sonar-token'
         NEXUS_CREDENTIALS = credentials("${NEXUS_CREDENTIAL_ID}")
         ARTIFACT_VERSION = '0.0.1-SNAPSHOT'
         ARTIFACT_ID = 'blog'
@@ -37,12 +38,12 @@ pipeline {
         }
 
         stage('SONARQUBE-ANALYSIS') {
-            steps() {
-                sh "echo hello from sonar"
-                /*withSonarQubeEnv('sonarqube-server') {
-                    //sh "mvn sonar:sonar"
-                    sh '${SCANNER_HOME}/bin/sonar-scanner --version'
-                }*/
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: SONAR_ID) {
+                        sh "mvn sonar:sonar"
+                    }
+                }
             }
         }
 
@@ -80,7 +81,7 @@ pipeline {
             }
         }*/
 
-        stage('Build Docker Image') {
+        stage('Build & Push Docker Image') {
             steps() {
                 script() {
                     sh 'id jenkins'
@@ -98,14 +99,3 @@ pipeline {
         }
     }
 }
-/*def downloadMavenArtifact(mavenCoordinates) {
-    def mavenCmd = """
-        curl -u ${NEXUS_CREDENTIALS_USR}:${NEXUS_CREDENTIALS_PSW} -O "${NEXUS_URL}${mavenCoordinates}"
-    """.stripIndent()
-
-    // Execute the Maven download command
-    sh mavenCmd
-
-    // Return the downloaded artifact path
-    return "${mavenCoordinates}"
-}*/
