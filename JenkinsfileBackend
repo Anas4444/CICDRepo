@@ -54,6 +54,15 @@ pipeline {
             }
         }
 
+        stage('ssh deploy') {
+            steps() {
+                sshagent(credentials:['197.15.209.210']){
+                    sh 'ssh  -o StrictHostKeyChecking=no  anase@197.15.209.210 uptime "ls"'
+                }
+                echo "success login"
+            }
+        }
+
         stage('Publish to Nexus') {
             steps() {
                 nexusArtifactUploader artifacts:
