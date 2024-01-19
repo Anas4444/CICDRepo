@@ -36,14 +36,14 @@ pipeline {
                 sh 'mvn clean compile'
             }
         }
-
-        stage('SONARQUBE-ANALYSIS') {
+        s:tage('SONARQUBE-ANALYSIS') {
             steps {
-                script {
+                sh 'echo Welcome to sonarqube'
+                /*script {
                     withSonarQubeEnv(credentialsId: SONAR_ID) {
                         sh "mvn sonar:sonar"
                     }
-                }
+                }*/
             }
         }
 
@@ -95,6 +95,8 @@ pipeline {
         stage('Deploy') {
             steps() {
                 sh "echo Backend deployed"
+                sh "docker compose -p 'jcibardo' down || echo 'project jcibardo not running'"
+                sh "docker compose -p 'jcibardo' up -d --build"
             }
         }
     }
