@@ -42,7 +42,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build & Push Docker Image') {
             steps() {
                 sh 'docker build -t $DOCKERHUB_REGISTRY:$BUILD_NUMBER .'
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
@@ -53,6 +53,8 @@ pipeline {
         stage('Deploy') {
             steps() {
                 sh "echo Frontend deployed"
+                sh "docker compose -p 'jcibardo' down || echo 'project jcibardo not running'"
+                sh "docker compose -p 'jcibardo' up -d --build"
             }
         }
     }
